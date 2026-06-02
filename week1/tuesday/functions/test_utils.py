@@ -57,8 +57,35 @@ def build_test_config(**settings):
     }
     for key, value in settings.items():
         config[key] = value
-    return config
-   
+    return config   
+
+def analyze_results(*results):
+    size = len(results)
+    passed_count = 0
+    failed_count = 0
+    total_duration = 0
+    for i in results:
+        if i["status"] == "pass":
+            passed_count += 1
+        if i["status"] == "fail":
+            failed_count += 1
+        total_duration += i["duration_ms"]
+
+    pass_rate = (passed_count/size)*100
+    avg_duration = total_duration/size
+
+
+    return (passed_count, failed_count, pass_rate, avg_duration)
+
+def generate_report(*results):
+    """Generate a formatted test report string.
+
+    Calls analyze_results() internally and formats the output.
+
+    Returns: formatted multi-line string
+    """
+    pass  # TODO
+
 #Test task 1
 assert format_test_name("Valid Login") == "test_valid_login"
 assert format_test_name("  Search Results  ") == "test_search_results"
@@ -87,4 +114,17 @@ assert stats["max"] == 95
 config = build_test_config(headless=True, timeout=60)
 assert config["browser"] == "chrome"  # default
 assert config["headless"] == True     # overridden
-assert config["timeout"] == 60       # overridden
+assert config["timeout"] == 60       # overridde
+
+#task 4
+results = [
+    create_test_result("test_login", "pass", 1200),
+    create_test_result("test_search", "pass", 850),
+    create_test_result("test_checkout", "fail", 2300, "Timeout"),
+    create_test_result("test_profile", "pass", 450),
+]
+
+passed, failed, rate, avg = analyze_results(*results)
+assert passed == 3
+assert failed == 1
+assert rate == 75.0
