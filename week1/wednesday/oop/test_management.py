@@ -29,3 +29,15 @@ class TestCase:
         if ' ' in name:
             return False
         return True
+
+class TestResult:
+    def __init__(self, test_name:str, status:str,  duration_ms:float, error_message=None) -> None:
+        self.test_name:str = test_name 
+        self.status:str = status 
+        self.duration_ms:float = duration_ms 
+        self.error_message = error_message 
+    
+    def summary(self):
+        icon = {"pass":"✅","fail":"❌"}
+        return f"{icon[self.status]} {self.test_name} ({self.duration_ms}ms {self.error_message}) "
+        
