@@ -1,0 +1,37 @@
+classDiagram
+
+    class TestCase {
+        +int total_created$
+        +str name
+        +str description
+        +str priority
+        +list tags
+        +__init__(name, description, priority, tags)
+        +run() bool
+        +from_dict(data) TestCase$
+        +is_valid_name(name) bool$
+    }
+
+    class TestResult {
+        +str test_name
+        +str status
+        +float duration_ms
+        +str error_message
+        +__init__(test_name, status, duration_ms, error_message)
+        +summary() str
+    }
+
+    class TestSuite {
+        +str name
+        +list tests
+        +__init__(name)
+        +add_test(test)
+        +remove_test(name)
+        +get_by_priority(priority) list
+        +count() int
+    }
+
+    class TestRunner {
+        +run(suite) list
+        +summary(results)
+    }
