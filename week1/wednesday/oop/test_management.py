@@ -14,7 +14,6 @@ class TestCase:
 
     @classmethod
     def from_dict(cls, data):
-        TestCase.total_created += 1    
         return cls(
             name=data["name"],
             description=data["description"],
@@ -38,8 +37,9 @@ class TestResult:
         self.error_message = error_message 
     
     def summary(self):
-        icon = {"pass":"✅","fail":"❌"}
-        return f"{icon[self.status]} {self.test_name} ({self.duration_ms}ms {self.error_message}) "
+        icon = {"pass": "✅", "fail": "❌"}
+        base = f"{icon[self.status]} {self.test_name} ({self.duration_ms}ms)"
+        return base if self.status == "pass" else f"{base} — {self.error_message}"
 
 class TestSuite:
     def __init__(self, name:str, tests:list[TestCase]) -> None:
@@ -62,6 +62,38 @@ class TestSuite:
         for test in self.tests:
             if test.priority == priority:
                 test_prio.append(test)
+        return test_prio
+
     def count(self):
         return len(self.tests)
-    
+   
+class TestRunner:
+    def run(self, suite):
+        """Run each test in the suite and return a list of TestResults."""
+        import time
+        import random
+        results = []
+        for test in suite.tests:
+            start = time.time()
+            passed = test.run()
+            duration = (time.time() - start) * 1000
+            # Simulate varying duration
+            duration += random.uniform(50, 500)
+            result = TestResult(
+                test.name,
+                "pass" if passed else "fail",
+                round(duration, 1),
+                None if passed else f"{test.name} assertion failed"
+            )
+            results.append(result)
+        return results
+
+    def summary(self, results):
+        total = len(results)
+        passed = sum(1 for r in results if r.status == "pass")
+        failed = total - passed
+        print(f"\n{'='*40}")
+        print(f"Results: {passed}/{total} passed, {failed} failed")
+        print(f"{'='*40}")
+        for r in results:
+            print(r.summary())
