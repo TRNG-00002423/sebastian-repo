@@ -40,4 +40,28 @@ class TestResult:
     def summary(self):
         icon = {"pass":"✅","fail":"❌"}
         return f"{icon[self.status]} {self.test_name} ({self.duration_ms}ms {self.error_message}) "
-        
+
+class TestSuite:
+    def __init__(self, name:str, tests:list[TestCase]) -> None:
+        self.name = name
+        self.tests = tests
+    
+    def add_test(self, test):
+        self.tests.append(test)
+
+    def remove_test(self, name):
+        index = 0
+        for i in self.tests:
+            if i.name == name:
+                self.tests.pop(index)
+                break
+            index += 1
+
+    def get_by_priority(self, priority):
+        test_prio = []
+        for test in self.tests:
+            if test.priority == priority:
+                test_prio.append(test)
+    def count(self):
+        return len(self.tests)
+    
