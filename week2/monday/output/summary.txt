@@ -1,0 +1,5 @@
+rows=5
+grand_total=$264.99
+average_line_revenue=53.00
+top_sku=B200
+top_line_revenue=$135.0
