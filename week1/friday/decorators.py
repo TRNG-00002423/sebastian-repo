@@ -28,6 +28,27 @@ def retry(max_attempts=3, delay=0.5, exceptions=(Exception,)):
         return wrapper
     return decorator
 
+def log_calls(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        args_str = ", ".join(
+            [repr(a) for a in args] +
+            [f"{k}={repr(v)}" for k, v in kwargs.items()]
+        )
+        print(f"📞 Calling {func.__name__}({args_str})")
+        result = func(*args, **kwargs)
+        print(f"✅ {func.__name__} → {result}")
+        return result
+    return wrapper
+
+@timer
+@log_calls
+@retry(max_attempts=2, delay=0.1)
+def process_data(data):
+    """Process data with timing, logging, and retry."""
+    if not data:
+        raise ValueError("Empty data")
+    return [x * 2 for x in data]
 
 if __name__ == "__main__":
     # Task 5 test
@@ -56,4 +77,15 @@ if __name__ == "__main__":
     assert result == "success"
     print("Task 6 passed\n")
 
-    
+    # Task 7 test
+    @log_calls
+    def add(a, b):
+        return a + b
+
+    add(3, 5)
+    add(10, b=20)
+    print("Task 7 passed\n")
+
+    # Task 8 test
+    result = process_data([1, 2, 3])
+    print("Task 8 result:", result)
