@@ -1,3 +1,5 @@
+from functools import reduce
+
 test_results = [
     {"name": "test_login", "module": "auth", "duration_ms": 1200, "status": "pass"},
     {"name": "test_register", "module": "auth", "duration_ms": 2100, "status": "pass"},
@@ -47,4 +49,22 @@ print("Summaries:", summaries)
 
 modules = set(map(lambda x: x["module"], test_results))
 print("Modules:", modules)
+
+# task 3
+
+total_duration = reduce(lambda acc, x: acc + x["duration_ms"], test_results, 0)
+print("Total duration:", total_duration)
+
+failure_time = reduce(lambda acc, x: acc + x["duration_ms"] if x["status"] == "fail" else acc, test_results, 0)
+print("Total failure time:", failure_time)
+
+longest_name = reduce(lambda acc, x: x["name"] if len(x["name"]) > len(acc) else acc, test_results, "")
+print("Longest test name:", longest_name)
+
+module_summary = reduce(
+    lambda acc, x: {**acc, x["module"]: acc.get(x["module"], 0) + 1},
+    test_results,
+    {}
+)
+print("Module summary:", module_summary)
 
