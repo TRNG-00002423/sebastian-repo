@@ -27,3 +27,24 @@ test_results.sort(key=lambda x: (x['status'],x['name']))
 print(test_results)
 
 print("\n\n")
+
+#task 2
+
+test_names = list(map(lambda x: x["name"], test_results))
+print("Test names:", test_names)
+
+failures = list(filter(lambda x: x["status"] == "fail", test_results))
+print("Failures:", failures)
+
+slow_tests = list(filter(lambda x: x["duration_ms"] > 1500, test_results))
+print("Slow tests:", slow_tests)
+
+summaries = list(map(
+    lambda x: f"{'✅' if x['status'] == 'pass' else '❌'} {x['name']} ({x['duration_ms']}ms)",
+    test_results
+))
+print("Summaries:", summaries)
+
+modules = set(map(lambda x: x["module"], test_results))
+print("Modules:", modules)
+
