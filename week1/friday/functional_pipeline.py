@@ -68,3 +68,25 @@ module_summary = reduce(
 )
 print("Module summary:", module_summary)
 
+# task 4
+endpoints = ["/login", "/search", "/checkout", "/profile"]
+expected_codes = [200, 200, 201, 200]
+actual_codes = [200, 500, 201, 403]
+
+for endpoint, expected, actual in zip(endpoints, expected_codes, actual_codes):
+    status = "PASS" if expected == actual else "FAIL"
+    print(f"{status}: {endpoint} expected={expected} actual={actual}")
+
+names, modules_list, durations, statuses = zip(*[
+    (r["name"], r["module"], r["duration_ms"], r["status"]) for r in test_results
+])
+print("Names:", names)
+print("Modules:", modules_list)
+print("Durations:", durations)
+print("Statuses:", statuses)
+
+name_to_duration = dict(zip(
+    map(lambda x: x["name"], test_results),
+    map(lambda x: x["duration_ms"], test_results)
+))
+print("Name to duration:", name_to_duration)
