@@ -14,8 +14,12 @@ def db_read_all():
 def db_read(student_id:int):
     with open('db.json', 'r') as f:
         json_file = json.load(f)
-    student = list(filter(lambda x: int(x['id']) == int(student_id), json_file))
-    return student
+    if student_id > len(db_json):
+        return {'status':401,"message":"User ID VERY invalid"}
+    elif db_json[student_id]['id'] != student_id:
+        return {'status':401,"message":"User ID not valid"}
+    else:
+        return list(filter(lambda x: int(x['id']) == int(student_id), json_file))
 
 def db_write(student):
     with open('db.json', 'r') as f:
@@ -30,7 +34,12 @@ def db_write(student):
 def db_update(student):
     with open('db.json', 'r') as f:
         db_json = json.load(f)
-        db_json[int(student['id'])] = student
+        if student['id'] > len(db_json):
+            return {'status':401,"message":"User ID VERY invalid"}
+        elif db_json[student['id']]['id'] != student['id']:
+            return {'status':401,"message":"User ID not valid"}
+        else:
+            db_json[int(student['id'])] = student
     with open('db.json', 'w') as f:
         json.dump(db_json, f, indent=4) 
     return student
