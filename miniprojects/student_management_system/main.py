@@ -35,5 +35,10 @@ def put_student(student_id):
 
     return jsonify(controller.db_update(student))
 
+@app.delete("/student/<student_id>")
+def delete_student(student_id):
+    return controller.db_delete(int(student_id))
+
+
 if __name__ == "__main__":
     app.run(debug=True)
