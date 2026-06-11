@@ -1,6 +1,6 @@
 public class SearchLib {
     public static int linearSearch(int[] sorted, int target){
-        for (int i = 0; i < sorted.length() ; i++){
+        for (int i = 0; i < sorted.length ; i++){
             if (sorted[i] == target){
                 return i;
             }
@@ -9,15 +9,15 @@ public class SearchLib {
     }
 
     public static int binarySearch(int[] sorted, int target){
-        int high = sorted.length();
+        int high = sorted.length-1;
         int low = 0;
 
         while (low <= high){
-            int mid = (high+low)/2
+            int mid = (high+low)/2;
             if (sorted[mid] == target) return mid;
-            else if (target[mid] > target) high = mid;
-            else low = mid;
+            else if (sorted[mid] > target) high = mid-1;
+            else low = mid+1;
         }
-        return -1
+        return -1;
     }
 }
